@@ -1,14 +1,24 @@
 #include "Snake.h"
 
 
-Snake::Snake(unsigned int startX, unsigned int startY) : head({startX, startY}), direction(Direction::STOP), growing(false) {}
+Snake::Snake(unsigned int startX, unsigned int startY) : head({startX, startY}), direction(Direction::STOP),
+                                                         growing(false) {
+}
+
+
+void Snake::reset(unsigned int startX, unsigned int startY) {
+    head = {startX, startY};
+    body.clear();
+    direction = Direction::STOP;
+    growing = false;
+}
 
 
 void Snake::setDirection(const Direction &newDirection) {
     if ((direction == Direction::UP && newDirection != Direction::DOWN) ||
         (direction == Direction::DOWN && newDirection != Direction::UP) ||
         (direction == Direction::LEFT && newDirection != Direction::RIGHT) ||
-        (direction == Direction::RIGHT && newDirection != Direction::LEFT)) {
+        (direction == Direction::RIGHT && newDirection != Direction::LEFT) || direction == Direction::STOP) {
         direction = newDirection;
     }
 }
@@ -35,11 +45,17 @@ std::vector<std::pair<unsigned int, unsigned int> > &Snake::getBodyPositions() {
 
 
 bool Snake::collidesWithSelf() const {
-    for (const std::pair<unsigned int, unsigned int>& part: body) {
+    for (const std::pair<unsigned int, unsigned int> &part: body) {
         if (part == head) {
             return true;
         }
-    }  return false;
+    }
+    return false;
+}
+
+
+void Snake::grow() {
+    growing = true;
 }
 
 

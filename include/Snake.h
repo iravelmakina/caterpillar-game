@@ -3,37 +3,41 @@
 
 
 enum class Direction {
-     STOP,
-     UP,
-     DOWN,
-     LEFT,
-     RIGHT
- };
+    STOP,
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT
+};
 
 
 class Apple;
 
 class Snake {
 public:
-     Snake(unsigned int startX, unsigned int startY);
+    Snake(unsigned int startX, unsigned int startY);
 
-     void setDirection(const Direction &newDirection);
+    void reset(unsigned int startX, unsigned int startY);
 
-     Direction getDirection() const;
+    void setDirection(const Direction &newDirection);
 
-     void setHeadPosition(const std::pair<unsigned int, unsigned int> &newHeadPosition);
+    Direction getDirection() const;
 
-     std::pair<unsigned int, unsigned int> getHeadPosition() const;
+    void setHeadPosition(const std::pair<unsigned int, unsigned int> &newHeadPosition);
 
-     std::vector<std::pair<unsigned int, unsigned int>>& getBodyPositions();
+    std::pair<unsigned int, unsigned int> getHeadPosition() const;
 
-     bool collidesWithSelf() const;
+    std::vector<std::pair<unsigned int, unsigned int> > &getBodyPositions();
 
-     void move();
+    bool collidesWithSelf() const;
+
+    void grow();
+
+    void move();
 
 private:
-     std::pair<unsigned int, unsigned int> head;
-     std::vector<std::pair<unsigned int, unsigned int>> body;
-     Direction direction;
-     bool growing;
+    std::pair<unsigned int, unsigned int> head;
+    std::vector<std::pair<unsigned int, unsigned int> > body;
+    Direction direction;
+    bool growing;
 };

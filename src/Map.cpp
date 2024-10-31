@@ -1,8 +1,21 @@
 #include "Map.h"
 
-Map::Map(unsigned int width, unsigned int height, unsigned int blockCount) : size(width, height), grid(height, std::vector<char>(width, ' ')) {
+Map::Map(unsigned int width, unsigned int height, const unsigned int blockCount) : size(width, height),
+    grid(height, std::vector<char>(width, ' ')) {
     std::srand(static_cast<unsigned int>(std::time(nullptr)));
     generateRandomWallBlocks(blockCount);
+}
+
+
+void Map::reset(const unsigned int wallBlockCount) {
+    grid = std::vector<std::vector<char> >(size.second, std::vector<char>(size.first, ' '));
+    walls.clear();
+    generateRandomWallBlocks(wallBlockCount);
+}
+
+
+std::pair<unsigned int, unsigned int> Map::getSize() const {
+    return size;
 }
 
 
@@ -26,10 +39,10 @@ void Map::generateRandomWallBlocks(const unsigned int blockCount) {
     unsigned int count = 0;
 
     while (count < blockCount) {
-        std::vector<std::pair<unsigned int, unsigned int>> newBlock = generateRandomWallBlock();
+        std::vector<std::pair<unsigned int, unsigned int> > newBlock = generateRandomWallBlock();
 
         if (!isBlockOverlap(newBlock)) {
-            for (const std::pair<unsigned int, unsigned int>& position : newBlock) {
+            for (const std::pair<unsigned int, unsigned int> &position: newBlock) {
                 addWall(position);
             }
             count++;
@@ -38,17 +51,17 @@ void Map::generateRandomWallBlocks(const unsigned int blockCount) {
 }
 
 
-std::vector<std::pair<unsigned int, unsigned int>> Map::generateRandomWallBlock() const {
+std::vector<std::pair<unsigned int, unsigned int> > Map::generateRandomWallBlock() const {
     const BlockType blockType = static_cast<BlockType>(std::rand() % 4);
     unsigned int startX = std::rand() % size.first;
     unsigned int startY = std::rand() % size.second;
 
-    std::vector<std::pair<unsigned int, unsigned int>> newBlock;
+    std::vector<std::pair<unsigned int, unsigned int> > newBlock;
 
     switch (blockType) {
         case BlockType::SINGLE:
             newBlock.push_back({startX, startY});
-        break;
+            break;
 
         case BlockType::HORIZONTAL:
             if (withinBounds({startX, startY}) && withinBounds({startX + 1, startY})) {
@@ -58,7 +71,7 @@ std::vector<std::pair<unsigned int, unsigned int>> Map::generateRandomWallBlock(
                     newBlock.push_back({startX + 2, startY});
                 }
             }
-        break;
+            break;
 
         case BlockType::VERTICAL:
             if (withinBounds({startX, startY}) && withinBounds({startX, startY + 1})) {
@@ -68,7 +81,7 @@ std::vector<std::pair<unsigned int, unsigned int>> Map::generateRandomWallBlock(
                     newBlock.push_back({startX, startY + 2});
                 }
             }
-        break;
+            break;
 
         case BlockType::L_SHAPE:
             if (withinBounds({startX, startY}) && withinBounds({startX + 1, startY}) &&
@@ -76,15 +89,15 @@ std::vector<std::pair<unsigned int, unsigned int>> Map::generateRandomWallBlock(
                 newBlock.push_back({startX, startY});
                 newBlock.push_back({startX + 1, startY});
                 newBlock.push_back({startX, startY + 1});
-                }
-        break;
+            }
+            break;
     }
     return newBlock;
 }
 
 
-bool Map::isBlockOverlap(const std::vector<std::pair<unsigned int, unsigned int>>& block) const {
-    for (const std::pair<unsigned int, unsigned int>& position : block) {
+bool Map::isBlockOverlap(const std::vector<std::pair<unsigned int, unsigned int> > &block) const {
+    for (const std::pair<unsigned int, unsigned int> &position: block) {
         if (isWall(position)) {
             return true;
         }

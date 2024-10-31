@@ -13,6 +13,10 @@ class Map {
 public:
     Map(unsigned int width, unsigned int height, unsigned int blockCount);
 
+    void reset(unsigned int wallBlockCount);
+
+    std::pair<unsigned int, unsigned int> getSize() const;
+
     bool withinBounds(const std::pair<unsigned int, unsigned int> &position) const;
 
     bool isWall(const std::pair<unsigned int, unsigned int> &position) const;
@@ -26,6 +30,7 @@ private:
     std::vector<std::pair<unsigned int, unsigned int> > walls;
     std::vector<std::vector<char> > grid;
 
-    std::vector<std::pair<unsigned int, unsigned int>> generateRandomWallBlock() const;
-    bool isBlockOverlap(const std::vector<std::pair<unsigned int, unsigned>> &block) const;
+    std::vector<std::pair<unsigned int, unsigned int> > generateRandomWallBlock() const;
+
+    bool isBlockOverlap(const std::vector<std::pair<unsigned int, unsigned> > &block) const;
 };

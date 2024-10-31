@@ -8,4 +8,7 @@ include_directories(include)
 add_executable(snake_game
         src/Apple.cpp
         src/Snake.cpp
-        src/Map.cpp)
+        src/Map.cpp
+        src/SnakeGame.cpp
+        src/main.cpp
+)

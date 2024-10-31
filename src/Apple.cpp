@@ -9,4 +9,3 @@ void Apple::setPosition(const std::pair<unsigned int, unsigned int> &newPosition
 std::pair<unsigned int, unsigned> Apple::getPosition() const {
     return position;
 }
-
