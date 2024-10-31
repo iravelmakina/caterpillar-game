@@ -3,7 +3,8 @@ project(snake_game)
 
 set(CMAKE_CXX_STANDARD 14)
 
-include_directories(src)
+include_directories(include)
 
 add_executable(snake_game
-    include/Apple.cpp)
+        src/Apple.cpp
+        src/Snake.cpp)
