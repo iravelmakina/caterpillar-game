@@ -1,18 +1,24 @@
 #include "SnakeGame.h"
 
 
-SnakeGame::SnakeGame(const unsigned int width, const unsigned int height) : maxSnakeSize(
+SnakeGame::SnakeGame(const unsigned int width, const unsigned int height) : map(width, height,
+                                                                                width / 5),
+                                                                            snake(width / 2, height / 2),
+                                                                            maxSnakeSize(
                                                                                 static_cast<unsigned int>(
                                                                                     0.75 * width * height)),
                                                                             currentState(
-                                                                                State::START_MENU),
-                                                                            prevState(State::START_MENU),
-                                                                            currentScore(0), bestScore(0),
-                                                                            map(width, height,
-                                                                                width / 10),
-                                                                            snake(width / 2, height / 2) {
+                                                                                State::START_MENU), prevState(State::START_MENU),
+                                                                            currentScore(0),
+                                                                            bestScore(0) {
     std::srand(static_cast<unsigned int>(std::time(nullptr))); // to main
     placeApple();
+}
+
+
+SnakeGame&::getInstance(const unsigned int width = 800, const unsigned int height = 600) {
+    static SnakeGame instance(width, height);
+    return instance;
 }
 
 
@@ -36,9 +42,13 @@ bool SnakeGame::isGameOver() const {
 }
 
 
+void SnakeGame::changeDirection(const Direction newDirection) {
+    snake.setDirection(newDirection);
+}
+
+
 void SnakeGame::start() {
     if (currentState == State::START_MENU || currentState == State::END_MENU) {
-        // check all coordinates
         currentState = State::PLAYING;
     }
 }
@@ -55,6 +65,11 @@ void SnakeGame::resume() {
     if (currentState == State::PAUSED) {
         currentState = State::PLAYING;
     }
+}
+
+
+void SnakeGame::exitGame() {
+    currentState = State::EXIT;
 }
 
 

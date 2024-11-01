@@ -8,13 +8,14 @@ enum class State {
     START_MENU,
     PAUSED,
     PLAYING,
-    END_MENU
+    END_MENU,
+    EXIT
 };
 
 
 class SnakeGame {
 public:
-    SnakeGame(unsigned int width, unsigned int height);
+    static SnakeGame& getInstance(unsigned int width, unsigned int height);
 
     State getState() const;
 
@@ -24,17 +25,25 @@ public:
 
     bool isGameOver() const;
 
+    void changeDirection(Direction newDirection);
+
     void start();
 
     void pause();
 
     void resume();
 
+    void exitGame();
+
     void reset();
 
     void update();
 
 private:
+    SnakeGame(unsigned int width, unsigned int height);
+
+    SnakeGame(const SnakeGame& other) = delete;
+    SnakeGame operator=(const SnakeGame& other) = delete;
     unsigned int maxSnakeSize;
     State currentState;
     State prevState;
