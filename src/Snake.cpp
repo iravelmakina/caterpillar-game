@@ -64,7 +64,7 @@ void Snake::move() {
         return;
     }
 
-    if (!body.empty()) {
+    if (!body.empty() || growing) {
         body.insert(body.begin(), head);
         if (!growing) {
             body.pop_back();
