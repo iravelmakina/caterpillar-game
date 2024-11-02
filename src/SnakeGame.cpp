@@ -1,16 +1,16 @@
 #include "SnakeGame.h"
 
 
-SnakeGame::SnakeGame(const unsigned int width, const unsigned int height) : map(width, height,
-                                                                                width / 5),
-                                                                            snake(width / 2, height / 2),
-                                                                            maxSnakeSize(
+SnakeGame::SnakeGame(const unsigned int width, const unsigned int height) : maxSnakeSize(
                                                                                 static_cast<unsigned int>(
                                                                                     0.75 * width * height)),
                                                                             currentState(
-                                                                                State::START_MENU), prevState(State::START_MENU),
-                                                                            currentScore(0),
-                                                                            bestScore(0) {
+                                                                                State::START_MENU),
+                                                                            prevState(State::START_MENU),
+                                                                            currentScore(0), bestScore(0), isWinner(false),
+                                                                            map(width, height,
+                                                                                width / 5),
+                                                                            snake(width / 2, height / 2) {
     std::srand(static_cast<unsigned int>(std::time(nullptr))); // to main
     placeApple();
 }
@@ -34,11 +34,6 @@ unsigned int SnakeGame::getCurrentScore() const {
 
 unsigned int SnakeGame::getBestScore() const {
     return bestScore;
-}
-
-
-bool SnakeGame::isGameOver() const {
-    return currentState == State::END_MENU;
 }
 
 
@@ -75,6 +70,7 @@ void SnakeGame::exitGame() {
 
 void SnakeGame::reset() {
     currentScore = 0;
+    isWinner = false;
     map.reset(map.getSize().first / 10);
     snake.reset(map.getSize().first / 2, map.getSize().second / 2);
     placeApple();
@@ -132,6 +128,7 @@ void SnakeGame::update() {
     checkCollisions();
 
     if (snake.getBodyPositions().size() + 1 >= maxSnakeSize) {
+        isWinner = true;
         currentState = State::END_MENU;
     }
 }

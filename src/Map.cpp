@@ -14,6 +14,11 @@ void Map::reset(const unsigned int wallBlockCount) {
 }
 
 
+std::vector<std::pair<unsigned int, unsigned int> > Map::getWalls() const {
+    return walls;
+}
+
+
 std::pair<unsigned int, unsigned int> Map::getSize() const {
     return size;
 }

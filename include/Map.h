@@ -17,6 +17,8 @@ public:
 
     std::pair<unsigned int, unsigned int> getSize() const;
 
+    std::vector<std::pair<unsigned int, unsigned int> > getWalls() const;
+
     bool withinBounds(const std::pair<unsigned int, unsigned int> &position) const;
 
     bool isWall(const std::pair<unsigned int, unsigned int> &position) const;
