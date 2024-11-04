@@ -9,17 +9,17 @@ SoundRenderer::SoundRenderer() {
 
 
 void SoundRenderer::loadSounds() {
-    if (!eatBuffer.loadFromFile("res/eat.wav")) {
+    if (!eatBuffer.loadFromFile("res/sounds/eat.wav")) {
         throw std::runtime_error("Failed to load eat sound");
     }
     eatSound.setBuffer(eatBuffer);
 
-    if (!collisionBuffer.loadFromFile("res/collision.wav")) {
+    if (!collisionBuffer.loadFromFile("res/sounds/collision.wav")) {
         throw std::runtime_error("Failed to load collision sound");
     }
     collisionSound.setBuffer(collisionBuffer);
 
-    if (!backgroundMusic.openFromFile("res/backgroundMusic.wav")) {
+    if (!backgroundMusic.openFromFile("res/sounds/backgroundMusic.wav")) {
         throw std::runtime_error("Failed to load background music");
     }
     backgroundMusic.setLoop(true);

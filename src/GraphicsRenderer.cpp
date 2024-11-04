@@ -7,19 +7,19 @@ GraphicsRenderer::GraphicsRenderer(sf::RenderWindow& window, const unsigned int 
 
 
 void GraphicsRenderer::loadTextures() {
-    if (!font.loadFromFile("res/arial.ttf")) {
+    if (!font.loadFromFile("res/fonts/arial.ttf")) {
         throw std::runtime_error("Failed to load font");
     }
-    if (!wallTexture.loadFromFile("res/block.png")) {
+    if (!wallTexture.loadFromFile("res/imgs/block.png")) {
         throw std::runtime_error("Failed to load wall texture");
     }
-    if (!appleTexture.loadFromFile("res/apple.png")) {
+    if (!appleTexture.loadFromFile("res/imgs/apple.png")) {
         throw std::runtime_error("Failed to load apple texture");
     }
-    if (!caterpillarBodyTexture.loadFromFile("res/caterpillarBody.png")) {
+    if (!caterpillarBodyTexture.loadFromFile("res/imgs/caterpillarBody.png")) {
         throw std::runtime_error("Failed to load apple texture");
     }
-    if (!caterpillarHeadTexture.loadFromFile("res/caterpillarHead.png")) {
+    if (!caterpillarHeadTexture.loadFromFile("res/imgs/caterpillarHead.png")) {
         throw std::runtime_error("Failed to load apple texture");
     }
 }
