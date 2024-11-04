@@ -3,7 +3,11 @@
 
 class SoundRenderer {
 public:
-    SoundRenderer();
+    static SoundRenderer &getInstance();
+
+    SoundRenderer(SoundRenderer &other) = delete;
+
+    SoundRenderer &operator=(SoundRenderer &other) = delete;
 
     void playEatSound();
 
@@ -18,6 +22,9 @@ public:
     void setSoundVolume(float volume);
 
 private:
+    SoundRenderer();
+
+    static std::unique_ptr<SoundRenderer> instance;
     sf::SoundBuffer eatBuffer;
     sf::SoundBuffer collisionBuffer;
 

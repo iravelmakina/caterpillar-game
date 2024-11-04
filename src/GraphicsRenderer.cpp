@@ -1,8 +1,20 @@
 #include "GraphicsRenderer.h"\
 
 
+
+std::unique_ptr<GraphicsRenderer> GraphicsRenderer::instance = nullptr;
+
+
 GraphicsRenderer::GraphicsRenderer(sf::RenderWindow& window, const unsigned int cellSize, const unsigned int scoreBoardHeight)  : window(window), cellSize(cellSize), scoreBoardHeight(scoreBoardHeight) {
     loadTextures();
+}
+
+
+GraphicsRenderer& GraphicsRenderer::getInstance(sf::RenderWindow& window, const unsigned int cellSize, const unsigned int scoreBoardHeight) {
+    if (!instance) {
+        instance = std::unique_ptr<GraphicsRenderer>(new GraphicsRenderer(window, cellSize, scoreBoardHeight));
+    }
+    return *instance;
 }
 
 

@@ -2,9 +2,20 @@
 #include <stdexcept>
 
 
+std::unique_ptr<SoundRenderer> SoundRenderer::instance = nullptr;
+
+
 SoundRenderer::SoundRenderer() {
     loadSounds();
     setMusicVolume(20);
+}
+
+
+SoundRenderer &SoundRenderer::getInstance() {
+    if (!instance) {
+        instance = std::unique_ptr<SoundRenderer>(new SoundRenderer());
+    }
+    return *instance;
 }
 
 

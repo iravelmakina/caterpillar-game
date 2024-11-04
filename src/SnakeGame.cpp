@@ -1,6 +1,9 @@
 #include "SnakeGame.h"
 
 
+std::unique_ptr<SnakeGame> SnakeGame::instance = nullptr;
+
+
 SnakeGame::SnakeGame(const unsigned int width, const unsigned int height, GraphicsRenderer &gRenderer, SoundRenderer &sRenderer) : gRenderer(gRenderer),
                                                                                                                         sRenderer(
                                                                                                                             sRenderer),
@@ -17,8 +20,6 @@ SnakeGame::SnakeGame(const unsigned int width, const unsigned int height, Graphi
 
 
 SnakeGame& SnakeGame::getInstance(const unsigned int width, const unsigned int height, GraphicsRenderer* gRenderer, SoundRenderer* sRenderer) {
-    static SnakeGame* instance = nullptr;
-
     if (!instance) {
         if (!gRenderer) {
             throw std::runtime_error("Graphics renderer must be provided for the initial getInstance() call");
@@ -26,7 +27,7 @@ SnakeGame& SnakeGame::getInstance(const unsigned int width, const unsigned int h
         if (!sRenderer) {
             throw std::runtime_error("Sound renderer must be provided for the initial getInstance() call");
         }
-        instance = new SnakeGame(width, height, *gRenderer, *sRenderer);
+        instance = std::unique_ptr<SnakeGame>(new SnakeGame(width, height, *gRenderer, *sRenderer));
     }
 
     return *instance;
