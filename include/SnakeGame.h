@@ -1,7 +1,10 @@
 #pragma once
-#include <Map.h>
-#include <Apple.h>
-#include <Snake.h>
+#include "Map.h"
+#include "Apple.h"
+#include "Snake.h"
+#include "GraphicsRenderer.h"
+#include "SoundRenderer.h"
+
 
 enum class State {
     START_MENU,
@@ -14,7 +17,9 @@ enum class State {
 
 class SnakeGame {
 public:
-    static SnakeGame &getInstance(unsigned int width, unsigned int height);
+    static SnakeGame &getInstance(unsigned int width, unsigned int height, GraphicsRenderer *gRenderer, SoundRenderer *sRenderer);
+
+    bool operator!() const;
 
     State getState() const;
 
@@ -25,37 +30,30 @@ public:
     void changeDirection(Direction newDirection);
 
     void start();
-
     void pause();
-
     void resume();
-
     void exitGame();
-
     void reset();
-
     void update();
+    void render();
 
 private:
-    SnakeGame(unsigned int width, unsigned int height);
+    SnakeGame(unsigned int width, unsigned int height, GraphicsRenderer& gRenderer, SoundRenderer& sRenderer);
 
-    SnakeGame(const SnakeGame &other) = delete;
+    void placeApple();
+    void checkCollisions();
+    void handleAppleCollision();
 
-    SnakeGame operator=(const SnakeGame &other) = delete;
+    GraphicsRenderer& gRenderer;
+    SoundRenderer& sRenderer;
+    Map map;
+    Snake snake;
+    Apple apple;
 
-    unsigned int maxSnakeSize;
-    State currentState;
-    State prevState;
+    const unsigned int maxSnakeSize;
     unsigned int currentScore;
     unsigned int bestScore;
     bool isWinner;
-    Map map;
-    Apple apple;
-    Snake snake;
-
-    void placeApple();
-
-    void checkCollisions();
-
-    void handleAppleCollision();
+    State currentState;
+    State prevState;
 };

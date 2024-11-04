@@ -1,24 +1,40 @@
 #include "SnakeGame.h"
 
 
-SnakeGame::SnakeGame(const unsigned int width, const unsigned int height) : maxSnakeSize(
-                                                                                static_cast<unsigned int>(
-                                                                                    0.75 * width * height)),
-                                                                            currentState(
-                                                                                State::START_MENU),
-                                                                            prevState(State::START_MENU),
-                                                                            currentScore(0), bestScore(0), isWinner(false),
-                                                                            map(width, height,
-                                                                                width / 5),
-                                                                            snake(width / 2, height / 2) {
-    std::srand(static_cast<unsigned int>(std::time(nullptr))); // to main
+SnakeGame::SnakeGame(const unsigned int width, const unsigned int height, GraphicsRenderer &gRenderer, SoundRenderer &sRenderer) : gRenderer(gRenderer),
+                                                                                                                        sRenderer(
+                                                                                                                            sRenderer),
+                                                                                                                        map(width, height,
+                                                                                                                            width / 4),
+                                                                                                                        snake(width / 2, height / 2), maxSnakeSize(
+                                                                                                                            static_cast<unsigned int>(
+                                                                                                                                0.65 * width * height)), currentScore(0),
+                                                                                                                        bestScore(0),
+                                                                                                                        isWinner(false), currentState(
+                                                                                                                            State::START_MENU), prevState(State::START_MENU) {
     placeApple();
 }
 
 
-SnakeGame&::getInstance(const unsigned int width = 800, const unsigned int height = 600) {
-    static SnakeGame instance(width, height);
-    return instance;
+SnakeGame& SnakeGame::getInstance(const unsigned int width, const unsigned int height, GraphicsRenderer* gRenderer, SoundRenderer* sRenderer) {
+    static SnakeGame* instance = nullptr;
+
+    if (!instance) {
+        if (!gRenderer) {
+            throw std::runtime_error("Graphics renderer must be provided for the initial getInstance() call");
+        }
+        if (!sRenderer) {
+            throw std::runtime_error("Sound renderer must be provided for the initial getInstance() call");
+        }
+        instance = new SnakeGame(width, height, *gRenderer, *sRenderer);
+    }
+
+    return *instance;
+}
+
+
+bool SnakeGame::operator!() const {
+    return currentState == State::EXIT;
 }
 
 
@@ -45,6 +61,7 @@ void SnakeGame::changeDirection(const Direction newDirection) {
 void SnakeGame::start() {
     if (currentState == State::START_MENU || currentState == State::END_MENU) {
         currentState = State::PLAYING;
+        sRenderer.playBackgroundMusic();
     }
 }
 
@@ -52,6 +69,7 @@ void SnakeGame::start() {
 void SnakeGame::pause() {
     if (currentState == State::PLAYING) {
         currentState = State::PAUSED;
+        sRenderer.stopBackgroundMusic();
     }
 }
 
@@ -59,28 +77,30 @@ void SnakeGame::pause() {
 void SnakeGame::resume() {
     if (currentState == State::PAUSED) {
         currentState = State::PLAYING;
+        sRenderer.playBackgroundMusic();
     }
 }
 
 
 void SnakeGame::exitGame() {
     currentState = State::EXIT;
+    sRenderer.stopBackgroundMusic();
 }
 
 
 void SnakeGame::reset() {
     currentScore = 0;
     isWinner = false;
-    map.reset(map.getSize().first / 10);
+    map.reset(map.getSize().first / 4);
     snake.reset(map.getSize().first / 2, map.getSize().second / 2);
     placeApple();
     currentState = State::START_MENU;
+    sRenderer.stopBackgroundMusic();
 }
 
 
 void SnakeGame::placeApple() {
     std::pair<unsigned int, unsigned int> newPosition;
-
     do {
         newPosition.first = std::rand() % map.getSize().first;
         newPosition.second = std::rand() % map.getSize().second;
@@ -94,6 +114,7 @@ void SnakeGame::placeApple() {
 
 void SnakeGame::checkCollisions() {
     if (map.isWall(snake.getHeadPosition()) || snake.collidesWithSelf()) {
+        sRenderer.playCollisionSound();
         if (currentScore > bestScore) {
             bestScore = currentScore;
         }
@@ -107,6 +128,7 @@ void SnakeGame::checkCollisions() {
 
 
 void SnakeGame::handleAppleCollision() {
+    sRenderer.playEatSound();
     snake.grow();
     currentScore += 10;
     placeApple();
@@ -127,8 +149,26 @@ void SnakeGame::update() {
 
     checkCollisions();
 
-    if (snake.getBodyPositions().size() + 1 >= maxSnakeSize) {
+    if (snake.size() + 1 >= maxSnakeSize) {
         isWinner = true;
         currentState = State::END_MENU;
+    }
+}
+
+
+void SnakeGame::render() {
+    switch (currentState) {
+        case State::START_MENU:
+            gRenderer.renderStartMenu();
+            break;
+        case State::PLAYING:
+            gRenderer.renderGame(snake.getHeadPosition(), snake.getBodyPositions(), apple.getPosition(), map.getWallPositions(), currentScore, bestScore);
+            break;
+        case State::PAUSED:
+            gRenderer.renderPauseMenu();
+            break;
+        case State::END_MENU:
+            gRenderer.renderEndMenu(currentScore, bestScore, isWinner);
+        break;
     }
 }
