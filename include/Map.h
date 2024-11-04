@@ -2,13 +2,6 @@
 #include <vector>
 
 
-enum class BlockType {
-    SINGLE,
-    HORIZONTAL,
-    VERTICAL,
-    L_SHAPE
-};
-
 class Map {
 public:
     Map(unsigned int width, unsigned int height, unsigned int blockCount);
