@@ -1,6 +1,17 @@
 #include "Snake.h"
 
 
+Direction operator!(const Direction direction) {
+    switch (direction) {
+        case Direction::UP: return Direction::DOWN;
+        case Direction::DOWN: return Direction::UP;
+        case Direction::LEFT: return Direction::RIGHT;
+        case Direction::RIGHT: return Direction::LEFT;
+    }
+    return direction;
+}
+
+
 Snake::Snake(unsigned int startX, unsigned int startY) : head({startX, startY}), direction(Direction::STOP),
                                                          growing(false) {
 }
@@ -13,12 +24,13 @@ void Snake::reset(unsigned int startX, unsigned int startY) {
     growing = false;
 }
 
+size_t Snake::size() const {
+    return body.size();
+}
+
 
 void Snake::setDirection(const Direction &newDirection) {
-    if ((direction == Direction::UP && newDirection != Direction::DOWN) ||
-        (direction == Direction::DOWN && newDirection != Direction::UP) ||
-        (direction == Direction::LEFT && newDirection != Direction::RIGHT) ||
-        (direction == Direction::RIGHT && newDirection != Direction::LEFT) || direction == Direction::STOP) {
+    if (newDirection != !direction) {
         direction = newDirection;
     }
 }

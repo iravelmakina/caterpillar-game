@@ -19,6 +19,8 @@ public:
 
     void reset(unsigned int startX, unsigned int startY);
 
+    size_t size() const;
+
     void setDirection(const Direction &newDirection);
 
     Direction getDirection() const;

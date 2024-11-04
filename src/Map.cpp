@@ -1,8 +1,8 @@
 #include "Map.h"
 
+
 Map::Map(unsigned int width, unsigned int height, const unsigned int blockCount) : size(width, height),
     grid(height, std::vector<char>(width, ' ')) {
-    std::srand(static_cast<unsigned int>(std::time(nullptr)));
     generateRandomWallBlocks(blockCount);
 }
 
@@ -14,7 +14,7 @@ void Map::reset(const unsigned int wallBlockCount) {
 }
 
 
-std::vector<std::pair<unsigned int, unsigned int> > Map::getWalls() const {
+std::vector<std::pair<unsigned int, unsigned int>> &Map::getWallPositions() {
     return walls;
 }
 
