@@ -12,6 +12,7 @@ public:
 
     std::vector<std::pair<unsigned int, unsigned int>> &getWallPositions();
 
+
     bool withinBounds(const std::pair<unsigned int, unsigned int> &position) const;
 
     bool isWall(const std::pair<unsigned int, unsigned int> &position) const;
@@ -24,8 +25,6 @@ private:
     std::pair<unsigned int, unsigned int> size;
     std::vector<std::pair<unsigned int, unsigned int> > walls;
     std::vector<std::vector<char> > grid;
-
-    std::vector<std::pair<unsigned int, unsigned int> > generateRandomWallBlock() const;
 
     bool isBlockOverlap(const std::vector<std::pair<unsigned int, unsigned> > &block) const;
 };

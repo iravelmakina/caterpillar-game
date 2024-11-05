@@ -34,9 +34,11 @@ private:
     sf::Texture appleTexture;
     sf::Texture caterpillarBodyTexture;
     sf::Texture caterpillarHeadTexture;
+
     unsigned int cellSize;
     unsigned int scoreBoardHeight;
 
+    void drawWalls(const std::vector<std::pair<unsigned int, unsigned int> > &wallPositions) const;
 
     void drawCaterpillar(const std::pair<unsigned int, unsigned int> &headPosition,
                          const std::vector<std::pair<unsigned int, unsigned int> > &
@@ -44,11 +46,10 @@ private:
 
     void drawApple(const std::pair<unsigned int, unsigned int> &applePosition) const;
 
-    void drawWalls(const std::vector<std::pair<unsigned int, unsigned int> > &wallPositions) const;
-
     void drawScoreBoard(unsigned int currentScore, unsigned int bestScore) const;
 
     void drawText(const std::string &textStr, float x, float y, unsigned int fontSize) const;
+
 
     void loadTextures();
 };

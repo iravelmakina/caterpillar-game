@@ -19,5 +19,5 @@ add_executable(snake-game src/main.cpp
 )
 
 set(SFML_DIR "/opt/homebrew/Cellar/sfml/2.6.1/lib/cmake/SFML")
-find_package(SFML 2.6.1 COMPONENTS system window graphics network audio REQUIRED)
-target_link_libraries(snake-game sfml-window sfml-graphics sfml-audio)
+find_package(SFML 2.6.1 COMPONENTS system window graphics audio REQUIRED)
+target_link_libraries(snake-game sfml-system sfml-window sfml-graphics sfml-audio)

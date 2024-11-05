@@ -5,35 +5,11 @@
 std::unique_ptr<GraphicsRenderer> GraphicsRenderer::instance = nullptr;
 
 
-GraphicsRenderer::GraphicsRenderer(sf::RenderWindow& window, const unsigned int cellSize, const unsigned int scoreBoardHeight)  : window(window), cellSize(cellSize), scoreBoardHeight(scoreBoardHeight) {
-    loadTextures();
-}
-
-
 GraphicsRenderer& GraphicsRenderer::getInstance(sf::RenderWindow& window, const unsigned int cellSize, const unsigned int scoreBoardHeight) {
     if (!instance) {
         instance = std::unique_ptr<GraphicsRenderer>(new GraphicsRenderer(window, cellSize, scoreBoardHeight));
     }
     return *instance;
-}
-
-
-void GraphicsRenderer::loadTextures() {
-    if (!font.loadFromFile("res/fonts/arial.ttf")) {
-        throw std::runtime_error("Failed to load font");
-    }
-    if (!wallTexture.loadFromFile("res/imgs/block.png")) {
-        throw std::runtime_error("Failed to load wall texture");
-    }
-    if (!appleTexture.loadFromFile("res/imgs/apple.png")) {
-        throw std::runtime_error("Failed to load apple texture");
-    }
-    if (!caterpillarBodyTexture.loadFromFile("res/imgs/caterpillarBody.png")) {
-        throw std::runtime_error("Failed to load apple texture");
-    }
-    if (!caterpillarHeadTexture.loadFromFile("res/imgs/caterpillarHead.png")) {
-        throw std::runtime_error("Failed to load apple texture");
-    }
 }
 
 
@@ -54,9 +30,9 @@ void GraphicsRenderer::renderGame(const std::pair<unsigned int, unsigned int> &h
 void GraphicsRenderer::renderStartMenu() const {
     window.clear(sf::Color(200, 200, 200));
 
-    drawText("Caterpillar Game", window.getSize().x * 0.5f, window.getSize().y * 0.3f, window.getSize().y * 0.08f);
-    drawText("Press Space to Start", window.getSize().x * 0.5f, window.getSize().y * 0.5f, window.getSize().y * 0.05f);
-    drawText("Press Q to Quit", window.getSize().x * 0.5f, window.getSize().y * 0.55f, window.getSize().y * 0.05f);
+    drawText("Caterpillar Game", window.getSize().x * 0.5f, window.getSize().y * 0.35f, window.getSize().y * 0.08f);
+    drawText("Press Space to Start", window.getSize().x * 0.5f, window.getSize().y * 0.55f, window.getSize().y * 0.05f);
+    drawText("Press Q to Quit", window.getSize().x * 0.5f, window.getSize().y * 0.6f, window.getSize().y * 0.05f);
 
     window.display();
 }
@@ -65,7 +41,7 @@ void GraphicsRenderer::renderStartMenu() const {
 void GraphicsRenderer::renderPauseMenu() const {
     window.clear(sf::Color(200, 200, 200));
 
-    drawText("Paused", window.getSize().x * 0.5f, window.getSize().y * 0.3f, window.getSize().y * 0.08f);
+    drawText("Paused", window.getSize().x * 0.5f, window.getSize().y * 0.38f, window.getSize().y * 0.08f);
     drawText("Press Space to Resume", window.getSize().x * 0.5f, window.getSize().y * 0.5f, window.getSize().y * 0.05f);
 
     window.display();
@@ -128,7 +104,7 @@ void GraphicsRenderer::drawScoreBoard(const unsigned int currentScore, const uns
     scoreBoardBackground.setPosition(0, 0);
     window.draw(scoreBoardBackground);
 
-    const unsigned int fontSize = static_cast<unsigned int>(scoreBoardHeight * 0.2);
+    const unsigned int fontSize = static_cast<unsigned int>(scoreBoardHeight * 0.2f);
 
     drawText("CURRENT SCORE: " + std::to_string(currentScore), window.getSize().x * 0.2f,
              scoreBoardHeight / 2, fontSize);
@@ -150,4 +126,28 @@ void GraphicsRenderer::drawText(const std::string &textStr, const float x, const
     text.setPosition(x, y);
 
     window.draw(text);
+}
+
+
+GraphicsRenderer::GraphicsRenderer(sf::RenderWindow& window, const unsigned int cellSize, const unsigned int scoreBoardHeight)  : window(window), cellSize(cellSize), scoreBoardHeight(scoreBoardHeight) {
+    loadTextures();
+}
+
+
+void GraphicsRenderer::loadTextures() {
+    if (!font.loadFromFile("res/fonts/arial.ttf")) {
+        throw std::runtime_error("Failed to load font");
+    }
+    if (!wallTexture.loadFromFile("res/imgs/block.png")) {
+        throw std::runtime_error("Failed to load wall texture");
+    }
+    if (!appleTexture.loadFromFile("res/imgs/apple.png")) {
+        throw std::runtime_error("Failed to load apple texture");
+    }
+    if (!caterpillarBodyTexture.loadFromFile("res/imgs/caterpillarBody.png")) {
+        throw std::runtime_error("Failed to load apple texture");
+    }
+    if (!caterpillarHeadTexture.loadFromFile("res/imgs/caterpillarHead.png")) {
+        throw std::runtime_error("Failed to load apple texture");
+    }
 }

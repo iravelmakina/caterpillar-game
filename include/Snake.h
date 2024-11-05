@@ -11,8 +11,6 @@ enum class Direction {
 };
 
 
-class Apple;
-
 class Snake {
 public:
     Snake(unsigned int startX, unsigned int startY);
@@ -30,6 +28,7 @@ public:
     std::pair<unsigned int, unsigned int> getHeadPosition() const;
 
     std::vector<std::pair<unsigned int, unsigned int> > &getBodyPositions();
+
 
     bool collidesWithSelf() const;
 

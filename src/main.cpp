@@ -7,11 +7,12 @@
 
 
 int main() {
-    std::srand(static_cast<unsigned int>(std::time(nullptr))); // make singleton, patterns, namespace for input
-    const GameConfig config(750, 25);
-    sf::RenderWindow window(sf::VideoMode(config.getWindowWidth(), config.getWindowHeight()), "Caterpillar Game",
+    std::srand(static_cast<unsigned int>(std::time(nullptr)));
+
+    const GameConfig config(750, 20);
+    sf::RenderWindow window(sf::VideoMode(config.getWindowWidth(), config.getWindowHeight()), config.getWindowTitle(),
                             sf::Style::Titlebar | sf::Style::Close);
-    window.setFramerateLimit(10);
+    window.setFramerateLimit(config.getFPS());
     GraphicsRenderer& gRenderer = GraphicsRenderer::getInstance(window, config.getCellSize(), config.getScoreBoardHeight());
     SoundRenderer& sRenderer = SoundRenderer::getInstance();
     SnakeGame& game = SnakeGame::getInstance(config.getGridSize(), config.getGridSize(), &gRenderer, &sRenderer);;
