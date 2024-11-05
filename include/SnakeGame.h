@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Map.h"
 #include "Apple.h"
 #include "Snake.h"
@@ -26,6 +27,7 @@ public:
 
     bool operator!() const;
 
+
     State getState() const;
 
     unsigned int getCurrentScore() const;
@@ -33,6 +35,7 @@ public:
     unsigned int getBestScore() const;
 
     void changeDirection(Direction newDirection);
+
 
     void start();
 
@@ -43,6 +46,7 @@ public:
     void exitGame();
 
     void reset();
+
 
     void update();
 
@@ -71,4 +75,9 @@ private:
     bool isWinner;
     State currentState;
     State prevState;
+
+    sf::Clock gameClock;
+    sf::Time deltaTime;
+    sf::Time moveInterval;
+    sf::Time timeAccumulator;
 };

@@ -4,22 +4,8 @@
 std::unique_ptr<SnakeGame> SnakeGame::instance = nullptr;
 
 
-SnakeGame::SnakeGame(const unsigned int width, const unsigned int height, GraphicsRenderer &gRenderer, SoundRenderer &sRenderer) : gRenderer(gRenderer),
-                                                                                                                        sRenderer(
-                                                                                                                            sRenderer),
-                                                                                                                        map(width, height,
-                                                                                                                            width / 4),
-                                                                                                                        snake(width / 2, height / 2), maxSnakeSize(
-                                                                                                                            static_cast<unsigned int>(
-                                                                                                                                0.65 * width * height)), currentScore(0),
-                                                                                                                        bestScore(0),
-                                                                                                                        isWinner(false), currentState(
-                                                                                                                            State::START_MENU), prevState(State::START_MENU) {
-    placeApple();
-}
-
-
-SnakeGame& SnakeGame::getInstance(const unsigned int width, const unsigned int height, GraphicsRenderer* gRenderer, SoundRenderer* sRenderer) {
+SnakeGame &SnakeGame::getInstance(const unsigned int width, const unsigned int height, GraphicsRenderer *gRenderer,
+                                  SoundRenderer *sRenderer) {
     if (!instance) {
         if (!gRenderer) {
             throw std::runtime_error("Graphics renderer must be provided for the initial getInstance() call");
@@ -63,6 +49,8 @@ void SnakeGame::start() {
     if (currentState == State::START_MENU || currentState == State::END_MENU) {
         currentState = State::PLAYING;
         sRenderer.playBackgroundMusic();
+        gameClock.restart();
+        timeAccumulator = sf::Time::Zero;
     }
 }
 
@@ -70,7 +58,7 @@ void SnakeGame::start() {
 void SnakeGame::pause() {
     if (currentState == State::PLAYING) {
         currentState = State::PAUSED;
-        sRenderer.stopBackgroundMusic();
+        sRenderer.pauseBackgroundMusic();
     }
 }
 
@@ -79,6 +67,8 @@ void SnakeGame::resume() {
     if (currentState == State::PAUSED) {
         currentState = State::PLAYING;
         sRenderer.playBackgroundMusic();
+        gameClock.restart();
+        timeAccumulator = sf::Time::Zero;
     }
 }
 
@@ -100,6 +90,58 @@ void SnakeGame::reset() {
 }
 
 
+void SnakeGame::update() {
+    if (currentState != State::PLAYING) return;
+
+    deltaTime = gameClock.restart();
+    timeAccumulator += deltaTime;
+
+    if (timeAccumulator >= moveInterval) {
+        snake.move();
+        timeAccumulator -= moveInterval;
+    }
+
+    std::pair<unsigned int, unsigned int> headPosition = snake.getHeadPosition();
+
+    headPosition.first = (headPosition.first + map.getSize().first) % map.getSize().first;
+    headPosition.second = (headPosition.second + map.getSize().second) % map.getSize().second;
+
+    snake.setHeadPosition(headPosition);
+
+    checkCollisions();
+
+    if (currentScore > bestScore) {
+        bestScore = currentScore;
+    }
+
+    if (snake.size() + 1 >= maxSnakeSize) {
+        isWinner = true;
+        currentState = State::END_MENU;
+    }
+}
+
+
+void SnakeGame::render() {
+    switch (currentState) {
+        case State::START_MENU:
+            gRenderer.renderStartMenu();
+            break;
+        case State::PLAYING:
+            gRenderer.renderGame(snake.getHeadPosition(), snake.getBodyPositions(), apple.getPosition(),
+                                 map.getWallPositions(), currentScore, bestScore);
+            break;
+        case State::PAUSED:
+            gRenderer.renderPauseMenu();
+            break;
+        case State::END_MENU:
+            gRenderer.renderEndMenu(currentScore, bestScore, isWinner);
+            break;
+        default:
+            break;
+    }
+}
+
+
 void SnakeGame::placeApple() {
     std::pair<unsigned int, unsigned int> newPosition;
     do {
@@ -116,9 +158,6 @@ void SnakeGame::placeApple() {
 void SnakeGame::checkCollisions() {
     if (map.isWall(snake.getHeadPosition()) || snake.collidesWithSelf()) {
         sRenderer.playCollisionSound();
-        if (currentScore > bestScore) {
-            bestScore = currentScore;
-        }
         currentState = State::END_MENU;
         return;
     }
@@ -136,40 +175,18 @@ void SnakeGame::handleAppleCollision() {
 }
 
 
-void SnakeGame::update() {
-    if (currentState != State::PLAYING) return;
-
-    snake.move();
-
-    std::pair<unsigned int, unsigned int> headPosition = snake.getHeadPosition();
-
-    headPosition.first = (headPosition.first + map.getSize().first) % map.getSize().first;
-    headPosition.second = (headPosition.second + map.getSize().second) % map.getSize().second;
-
-    snake.setHeadPosition(headPosition);
-
-    checkCollisions();
-
-    if (snake.size() + 1 >= maxSnakeSize) {
-        isWinner = true;
-        currentState = State::END_MENU;
-    }
-}
-
-
-void SnakeGame::render() {
-    switch (currentState) {
-        case State::START_MENU:
-            gRenderer.renderStartMenu();
-            break;
-        case State::PLAYING:
-            gRenderer.renderGame(snake.getHeadPosition(), snake.getBodyPositions(), apple.getPosition(), map.getWallPositions(), currentScore, bestScore);
-            break;
-        case State::PAUSED:
-            gRenderer.renderPauseMenu();
-            break;
-        case State::END_MENU:
-            gRenderer.renderEndMenu(currentScore, bestScore, isWinner);
-        break;
-    }
+SnakeGame::SnakeGame(const unsigned int width, const unsigned int height, GraphicsRenderer &gRenderer,
+                     SoundRenderer &sRenderer) : gRenderer(gRenderer),
+                                                 sRenderer(
+                                                     sRenderer),
+                                                 map(width, height,
+                                                     width / 4),
+                                                 snake(width / 2, height / 2), maxSnakeSize(
+                                                     static_cast<unsigned int>(
+                                                         0.65 * width * height)), currentScore(0),
+                                                 bestScore(0),
+                                                 isWinner(false), currentState(
+                                                     State::START_MENU), prevState(State::START_MENU),
+                                                 moveInterval(sf::seconds(0.1f)), timeAccumulator(sf::Time::Zero) {
+    placeApple();
 }
