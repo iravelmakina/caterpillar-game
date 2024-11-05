@@ -21,6 +21,8 @@ void InputHandler::handleInput(SnakeGame &game, sf::RenderWindow &window) {
             case State::END_MENU:
                 handleEndMenuInput(game, event);
                 break;
+            default:
+                break;
         }
     }
 }

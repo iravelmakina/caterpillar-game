@@ -7,6 +7,7 @@ Direction operator!(const Direction direction) {
         case Direction::DOWN: return Direction::UP;
         case Direction::LEFT: return Direction::RIGHT;
         case Direction::RIGHT: return Direction::LEFT;
+        default: break;
     }
     return direction;
 }
