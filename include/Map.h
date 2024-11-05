@@ -2,13 +2,6 @@
 #include <vector>
 
 
-enum class BlockType {
-    SINGLE,
-    HORIZONTAL,
-    VERTICAL,
-    L_SHAPE
-};
-
 class Map {
 public:
     Map(unsigned int width, unsigned int height, unsigned int blockCount);
@@ -17,7 +10,8 @@ public:
 
     std::pair<unsigned int, unsigned int> getSize() const;
 
-    std::vector<std::pair<unsigned int, unsigned int> > getWalls() const;
+    std::vector<std::pair<unsigned int, unsigned int>> &getWallPositions();
+
 
     bool withinBounds(const std::pair<unsigned int, unsigned int> &position) const;
 
@@ -31,8 +25,6 @@ private:
     std::pair<unsigned int, unsigned int> size;
     std::vector<std::pair<unsigned int, unsigned int> > walls;
     std::vector<std::vector<char> > grid;
-
-    std::vector<std::pair<unsigned int, unsigned int> > generateRandomWallBlock() const;
 
     bool isBlockOverlap(const std::vector<std::pair<unsigned int, unsigned> > &block) const;
 };
