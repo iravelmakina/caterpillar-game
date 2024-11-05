@@ -1,14 +1,7 @@
 #include "SoundRenderer.h"
-#include <stdexcept>
 
 
 std::unique_ptr<SoundRenderer> SoundRenderer::instance = nullptr;
-
-
-SoundRenderer::SoundRenderer() {
-    loadSounds();
-    setMusicVolume(20);
-}
 
 
 SoundRenderer &SoundRenderer::getInstance() {
@@ -16,6 +9,46 @@ SoundRenderer &SoundRenderer::getInstance() {
         instance = std::unique_ptr<SoundRenderer>(new SoundRenderer());
     }
     return *instance;
+}
+
+
+void SoundRenderer::playEatSound() {
+    eatSound.play();
+}
+
+
+void SoundRenderer::playCollisionSound() {
+    collisionSound.play();
+}
+
+
+void SoundRenderer::playBackgroundMusic() {
+    backgroundMusic.play();
+}
+
+void SoundRenderer::pauseBackgroundMusic() {
+    backgroundMusic.pause();
+}
+
+void SoundRenderer::stopBackgroundMusic() {
+    backgroundMusic.stop();
+}
+
+
+void SoundRenderer::setMusicVolume(const float volume) {
+    backgroundMusic.setVolume(volume);
+}
+
+
+void SoundRenderer::setSoundVolume(const float volume) {
+    eatSound.setVolume(volume);
+    collisionSound.setVolume(volume);
+}
+
+
+SoundRenderer::SoundRenderer() {
+    loadSounds();
+    setMusicVolume(10);
 }
 
 
@@ -34,35 +67,4 @@ void SoundRenderer::loadSounds() {
         throw std::runtime_error("Failed to load background music");
     }
     backgroundMusic.setLoop(true);
-}
-
-
-void SoundRenderer::playEatSound() {
-    eatSound.play();
-}
-
-
-void SoundRenderer::playCollisionSound() {
-    collisionSound.play();
-}
-
-
-void SoundRenderer::playBackgroundMusic() {
-    backgroundMusic.play();
-}
-
-
-void SoundRenderer::stopBackgroundMusic() {
-    backgroundMusic.stop();
-}
-
-
-void SoundRenderer::setMusicVolume(const float volume) {
-    backgroundMusic.setVolume(volume);
-}
-
-
-void SoundRenderer::setSoundVolume(const float volume) {
-    eatSound.setVolume(volume);
-    collisionSound.setVolume(volume);
 }

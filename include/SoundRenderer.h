@@ -15,6 +15,8 @@ public:
 
     void playBackgroundMusic();
 
+    void pauseBackgroundMusic();
+
     void stopBackgroundMusic();
 
     void setMusicVolume(float volume);
@@ -25,12 +27,11 @@ private:
     SoundRenderer();
 
     static std::unique_ptr<SoundRenderer> instance;
+
     sf::SoundBuffer eatBuffer;
     sf::SoundBuffer collisionBuffer;
-
     sf::Sound eatSound;
     sf::Sound collisionSound;
-
     sf::Music backgroundMusic;
 
     void loadSounds();
