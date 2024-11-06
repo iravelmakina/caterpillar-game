@@ -32,7 +32,7 @@ void InputHandler::handleStartMenuInput(SnakeGame &game, const sf::Event &event)
     if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space) {
         game.start();
     } else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Q) {
-        game.exitGame();
+        game.quit();
     }
 }
 

@@ -21,7 +21,7 @@ SnakeGame &SnakeGame::getInstance(const unsigned int width, const unsigned int h
 
 
 bool SnakeGame::operator!() const {
-    return currentState == State::EXIT;
+    return currentState == State::QUIT;
 }
 
 
@@ -73,8 +73,8 @@ void SnakeGame::resume() {
 }
 
 
-void SnakeGame::exitGame() {
-    currentState = State::EXIT;
+void SnakeGame::quit() {
+    currentState = State::QUIT;
     sRenderer.stopBackgroundMusic();
 }
 

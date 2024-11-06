@@ -12,7 +12,7 @@ enum class State {
     PAUSED,
     PLAYING,
     END_MENU,
-    EXIT
+    QUIT
 };
 
 
@@ -43,7 +43,7 @@ public:
 
     void resume();
 
-    void exitGame();
+    void quit();
 
     void reset();
 
