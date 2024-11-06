@@ -61,8 +61,10 @@ A simple, engaging Caterpillar game implemented using Object-Oriented Programmin
 ### How to play
 - **Controls**:
   - Arrow keys or 'A', 'W', 'D', 'S to move the snake.
-  - `P` to pause and resume the game.
-  - `R` to restart after a game over.
+  - `Space` to pause and resume the game.
+  - `Space` to restart after a game over.
+  - `Q` to quit the game.
+
 <p align="center">
   <img src="https://github.com/user-attachments/assets/e65f6089-34f7-4c4d-a29f-2a881cef7fc8" alt="Caterpillar Game GIF" width="320">
 </p>
