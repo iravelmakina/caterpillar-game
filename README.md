@@ -80,9 +80,10 @@ The game has been tested for core mechanics, including snake movement, collision
 For a detailed testing guide, see the [Testing](https://github.com/user-attachments/files/17636034/Ass5-6.docx)
  section of the report.
 
+## License
 
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
+## Contributor
 
-
-
-
+- [@iravelmakina](https://github.com/iravelmakina)
